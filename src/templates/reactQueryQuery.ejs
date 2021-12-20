@@ -1,0 +1,44 @@
+import { useQuery } from 'react-query'
+
+/**
+ * <%= summary %>
+ * Method: <%= operation %>
+ * 
+ * <%= description %>
+ */
+export function use<%= operationIdPascal %>({
+  <% parameters.forEach(function(parameter){ -%>
+    <%= parameter.name %>,
+  <% }); -%>
+  ...queryOptions
+}) {
+  const { data, ...query } = useQuery(
+    <%= operationId %>QueryKey({
+      <% parameters.forEach(function(parameter){ -%>
+        <%= parameter.name %>,
+      <% }) %>
+    }),
+    queryOptions
+  )
+
+  return {
+    ...query,
+    fetch<%= namePascal %>: query.refetch,
+    <%= nameCamel %>: data.<%= nameCamel %> ?? {}
+  }
+}
+
+export function <%= operationId %>QueryKey({
+  <% parameters.forEach(function(parameter){ -%>
+    <%= parameter.name %>,
+  <% }); %>
+}) {
+  <% if (queryParams.length > 0) { %>
+    const params = new URLSearchParams({
+      <% queryParams.forEach(function(parameter){ -%>
+        '<%= parameter.nameKebab %>': <%= parameter.nameCamel %>,
+      <% }) %>
+    })
+  <% } %>
+  return `<%= path %><% if (queryParams.length > 0) { %>?${params}<% } %>`
+}
