@@ -8,6 +8,7 @@ import { OperationType } from './types'
 import { pascalCase } from './lib'
 
 // Constants
+const API_URL = 'https://petstore.swagger.io/v2/swagger.json'
 const ORG_PATH = '/v2/admin/org/{org-name}'
 const SUPPORTED_OPERATIONS = ['get']
 
@@ -19,7 +20,7 @@ function main() {
   generateTypes()
 
   // Fetch the OpenAPI spec.
-  https.get('https://stg.admin.api.ngc.nvidia.com/v3/api-docs', (res: any) => {
+  https.get(API_URL, (res: any) => {
     let data = ''
     res.on('data', (chunk: any) => data += chunk)
     res.on('end', () => {
